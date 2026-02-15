@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "148922885697",
+    "project_id": "wifishield-760c2",
+    "storage_bucket": "wifishield-760c2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148922885697:android:8550663da9c64e079608c0",
+        "android_client_info": {
+          "package_name": "com.example.practice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "148922885697-qu27vgmar6nhtv284nk213resqt2lf10.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.practice",
+            "certificate_hash": "9dbbda26ca8175f89ce77e08a6cd3efeac535cbe"
+          }
+        },
+        {
+          "client_id": "148922885697-ebulj068p2ihr2sf32af2v8mrh8bk3tb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGdjh-SLnsrf_ihS7NvCE18nVuywM1HJM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "148922885697-ebulj068p2ihr2sf32af2v8mrh8bk3tb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
