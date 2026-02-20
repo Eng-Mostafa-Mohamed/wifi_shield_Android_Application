@@ -10,3 +10,4 @@ fun IpResponseDto.toIpResponse(): IpResponse{
 fun IpResponse.toIpResponseDto(): IpResponseDto{
     return IpResponseDto(ip = ip)
 }
+

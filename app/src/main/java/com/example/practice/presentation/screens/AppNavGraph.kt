@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.data.core.modules.SessionManager
 import com.example.practice.presentation.screens.AuthScreen.LoginScreen
 import com.example.onboarding.OnboardingScreen
 import com.example.practice.presentation.screens.AuthScreen.ForgotPasswordScreen
@@ -22,7 +23,12 @@ import com.example.practice.presentation.screens.AuthScreen.RegisterScreen
 import com.example.practice.presentation.screens.AuthScreen.RegistrationScreen
 import com.example.practice.presentation.screens.AuthScreen.RouterSetup
 import com.example.practice.presentation.screens.MainScreen.MainScreen
+import com.example.practice.presentation.screens.ToolsScreen.ToolsScreen
 import com.example.practice.presentation.screens.WelcomeScreen.WelcomeScreen
+import com.example.practice.presentation.screens.devices.BlockedDevicesScreen
+import com.example.practice.presentation.screens.devices.DevicesScreen
+import com.example.practice.presentation.screens.GuideScreen.GuideScreen
+import com.example.practice.presentation.screens.Test.FullWifiSettingsScreen
 import com.example.practice.presentation.viewmodels.OnboardingViewModel
 
 @Composable
@@ -63,10 +69,16 @@ fun AppNavGraph() {
                 }
             } )}
             composable("MainReg") { RegistrationScreen(navController) }
-
             composable("resetPass") { ForgotPasswordScreen(navController = navController) { } }
             composable("welcome") { WelcomeScreen(navController) }
-            composable("Main") { MainScreen() }
+            composable("Main") { MainScreen(navController) }
+            composable("Guide") { GuideScreen() }
+            composable("connectedDevices") { DevicesScreen(navController) }
+            composable("blockedDevices") { BlockedDevicesScreen(navController) }
+            composable("tools") { ToolsScreen() }
+            composable("wifiSettings") { FullWifiSettingsScreen(navController) }
+
+
         }
     }
 }
@@ -78,7 +90,6 @@ fun LauncherScreen(viewModel: OnboardingViewModel, navController: NavController)
     val firstTime = viewModel.isFirstTimeUser
 
     if (firstTime == null) {
-
         Box(modifier = Modifier.fillMaxSize()) { }
     } else if (firstTime) {
         LaunchedEffect(Unit) {
@@ -87,9 +98,18 @@ fun LauncherScreen(viewModel: OnboardingViewModel, navController: NavController)
             }
         }
     } else {
-        LaunchedEffect(Unit) {
-            navController.navigate("MainReg") {
-                popUpTo("launcher") { inclusive = true }
+        val token = SessionManager.authToken
+        if (!token.isNullOrEmpty()) {
+            LaunchedEffect(Unit) {
+                navController.navigate("MainReg") {
+                    popUpTo("launcher") { inclusive = true }
+                }
+            }
+        } else {
+            LaunchedEffect(Unit) {
+                navController.navigate("Main") {
+                    popUpTo("launcher") { inclusive = true }
+                }
             }
         }
     }

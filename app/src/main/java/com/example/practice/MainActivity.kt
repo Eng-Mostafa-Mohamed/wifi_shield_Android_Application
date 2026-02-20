@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
+import com.example.data.core.modules.SessionManager
 import com.example.practice.presentation.screens.AppNavGraph
 import com.example.practice.ui.theme.PracticeTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,6 +21,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        SessionManager.init(applicationContext)
+
         setContent {
             PracticeTheme {
                 AppNavGraph()

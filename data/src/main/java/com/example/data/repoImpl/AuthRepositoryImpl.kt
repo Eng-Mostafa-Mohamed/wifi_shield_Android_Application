@@ -1,5 +1,6 @@
 package com.example.data.repoImpl
 
+import android.content.Context
 import com.example.data.core.RouterApiService
 import com.example.data.core.UserDao
 import com.example.data.core.modules.SessionManager
@@ -33,7 +34,7 @@ class AuthRepositoryImpl(
 
            if (response.isSuccessful){
                val token=response.body()?.token?:""
-               SessionManager.authToken=token
+               SessionManager.authToken = token
                Result.success(token)
 
            } else {
