@@ -1,6 +1,8 @@
 package com.example.data.core.modules
 
 import android.content.Context
+import com.example.data.core.IpReportApiService
+import com.example.data.core.RetrofitInstanceForIpReport
 import com.example.data.core.RetrofitInstanceForRouter
 import com.example.data.core.RouterApiService
 import com.example.data.core.UserDao
@@ -48,12 +50,18 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(
-        api: RouterApiService,
-        auth: FirebaseAuth,
-        userDao: UserDao
-    ): UserRepository =
-        AuthRepositoryImpl(api,userDao, auth)
+    fun provideIpReportApi(): IpReportApiService =
+        RetrofitInstanceForIpReport.IpReportApi
+
+
+    @Module
+    @InstallIn(SingletonComponent::class)
+    object CoreModule {
+
+
+    }
+
+
 }
 
 

@@ -19,15 +19,20 @@ val bg_whiteGray = Color(0xFFF7F7F7)
 val blue = Color(0xFF6200EE)
 val blue2 = Color(0xFF11134F)
 val move = Color(0xFFaa16cf)
+val move_white = Color(0xFF8f59fd)
 val dark_blue = Color(0xFF13132b)
 val dark_gray = Color(0xFF191a2f)
 val white_blue =Color(0xFF2196F3)
 
-
-val primaryColor = Color(0xFFA216E3) // your main accent color
+val ThemeBlue = Color(0xFF0F2027)
+val AccentBlue = Color(0xFF2196F3)
+val SurfaceGray = Color(0xFFF8FAFC)
+val SuccessGreen = Color(0xFF4CAF50)
+val ErrorRed = Color(0xFFE53935)
+val primaryColor = Color(0xFFA216E3)
 val progressBgColor = Color(0xFF9235E7).copy(alpha = 0.2f)
 
-val secondaryColor = Color(0xFF46218e) // for back/secondary buttons
+val secondaryColor = Color(0xFF46218e)
 val whiteText = Color.White
 
 val blueBrush = Brush.horizontalGradient(

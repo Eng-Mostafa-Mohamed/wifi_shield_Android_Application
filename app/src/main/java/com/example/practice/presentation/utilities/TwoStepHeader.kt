@@ -1,4 +1,5 @@
 package com.example.practice.presentation.utilities
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,7 +8,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -42,6 +45,9 @@ fun TwoStepHeader(currentStep: Int) {
             )
             .padding(30.dp)
     ) {
+        Canvas(modifier = Modifier.size(200.dp).offset(x = 180.dp, y = (-50).dp)) {
+            drawCircle(color = Color.White.copy(alpha = 0.1f))
+        }
 
         Column(
             modifier = Modifier.fillMaxSize(),

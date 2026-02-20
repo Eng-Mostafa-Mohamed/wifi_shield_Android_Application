@@ -46,3 +46,26 @@ object RetrofitInstanceForRouter {
     }
 
 }
+
+
+
+object RetrofitInstanceForIpReport{
+
+    private val logging = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(logging)
+        .build()
+
+    val IpReportApi: IpReportApiService by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://api.abuseipdb.com/api/v2/")
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(IpReportApiService::class.java)
+    }
+
+}

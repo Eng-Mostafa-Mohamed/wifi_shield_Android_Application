@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import com.example.practice.R
 import com.example.practice.SetStatusBarColor
 import com.example.practice.presentation.viewmodels.RegisterViewModel
+import com.example.practice.ui.theme.blue
 import com.example.practice.ui.theme.blueBrush
 import com.example.practice.ui.theme.dark_blue
 import com.example.practice.ui.theme.titleFont
@@ -83,10 +84,9 @@ fun RegisterScreen(
 
             Text(
                 text = "Create  account",
-                fontSize = 31.sp,
-                fontWeight = FontWeight.Medium,
-                fontFamily = titleFont,
-                color = Color.Black
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold,
+                color = blue
             )
             Spacer(Modifier.height(30.dp))
 

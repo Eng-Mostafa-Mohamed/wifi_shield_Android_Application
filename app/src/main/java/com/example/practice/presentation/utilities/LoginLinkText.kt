@@ -8,21 +8,20 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import com.example.practice.ui.theme.blue
-import com.example.practice.ui.theme.move
+import com.example.practice.ui.theme.dark_blue
 import com.example.practice.ui.theme.secondaryColor
-import com.example.practice.ui.theme.white_blue
+
 
 @Composable
 fun ClickableTextCustom(
     fullText: String,
     clickableText: String,
-    clickableColor: Color = move,
+    clickableColor: Color =blue,
     onClick: () -> Unit
 ) {
     val annotatedText = buildAnnotatedString {
-        append(fullText) // text before clickable
+        append(fullText)
 
-        // Add clickable text
         pushStringAnnotation(tag = "CLICK", annotation = "click")
         withStyle(
             style = SpanStyle(

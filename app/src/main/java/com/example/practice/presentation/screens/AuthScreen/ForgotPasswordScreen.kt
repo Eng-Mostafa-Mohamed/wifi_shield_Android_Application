@@ -2,6 +2,7 @@ package com.example.practice.presentation.screens.AuthScreen
 
 import ClickableTextCustom
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -32,6 +33,7 @@ import com.example.practice.R
 import com.example.practice.SetStatusBarColor
 import com.example.practice.presentation.viewmodels.ForgotPasswordViewModel
 import com.example.practice.ui.theme.HeaderFont
+import com.example.practice.ui.theme.blue
 import com.example.practice.ui.theme.blueBrush
 import com.example.practice.ui.theme.dark_blue
 import com.example.practice.ui.theme.move
@@ -92,6 +94,11 @@ fun ForgotPasswordScreen(
                         )
                     )
             ) {
+
+                Canvas(modifier = Modifier.size(200.dp).offset(x = 180.dp, y = (-50).dp)) {
+                    drawCircle(color = Color.White.copy(alpha = 0.1f))
+                }
+
                 Column(modifier = Modifier.padding(20.dp)) {
 
                     Text(
@@ -137,10 +144,9 @@ fun ForgotPasswordScreen(
                     Spacer(Modifier.height(30.dp))
                     androidx.compose.material.Text(
                         text = "Reset Now ",
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = titleFont,
-                        color = Color.Black
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.Bold,
+                        color =blue
                     )
 
                     Spacer(Modifier.height(40.dp))

@@ -1,41 +1,39 @@
 package com.example.onboarding
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.Text
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.* // استخدام Material 3 الموحد
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.practice.SetStatusBarColor
 import com.example.practice.presentation.viewmodels.OnboardingViewModel
-import com.example.practice.ui.theme.blue
 import com.example.practice.ui.theme.dark_blue
-import com.example.practice.ui.theme.move
-import com.example.practice.ui.theme.primaryColor
-import com.example.practice.ui.theme.progressBgColor
-import com.example.practice.ui.theme.secondaryColor
-import com.example.practice.ui.theme.whiteText
 
+// الألوان الموحدة للتطبيق بالكامل
+val DeepBlue = Color(0xFF0F172A)
+val ElectricBlue = Color(0xFF3B82F6)
 
-// Data class for onboarding page
 data class OnboardingPage(
     val image: Int,
     val title: String,
     val description: String
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
     viewModel: OnboardingViewModel,
@@ -57,115 +55,154 @@ fun OnboardingScreen(
             "Control Access Easily",
             "Block or allow devices instantly, giving you full control over your WiFi."
         )
-
     )
 
     val page = viewModel.currentPage
-    val progress = (page + 1) / pages.size.toFloat()
+    val isLastPage = page == pages.lastIndex
 
+    SetStatusBarColor(color = dark_blue,darkIcons = false)
 
-
-    SetStatusBarColor(color =dark_blue ,false)
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-
+    Scaffold(
+        containerColor = Color.White,
+        topBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (!isLastPage) {
+                    TextButton(onClick = navigateToLogin) {
+                        Text("Skip", color = Color.Gray, fontWeight = FontWeight.SemiBold)
+                    }
+                }
+            }
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp, vertical = 32.dp),
+                .padding(paddingValues)
+                .padding(horizontal = 32.dp, vertical = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-
-            Spacer(modifier = Modifier.height(60.dp))
-
-
-            Image(
-                painter = painterResource(id = pages[page].image),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth(7f)
-                    .fillMaxHeight(0.4f),
-                contentScale = ContentScale.Fit
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-
-            Text(
-                text = pages[page].title,
-                style = MaterialTheme.typography.h5,
-                color = dark_blue, fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-
-            Text(
-                text = pages[page].description,
-                style = MaterialTheme.typography.body1,
-                color = Color.Gray,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-
-
-
-
-            LinearProgressIndicator(
-                progress = progress,
+            // 1. Illustration Area
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(6.dp),
-                color = if (page < pages.lastIndex) secondaryColor else primaryColor,
-                backgroundColor = progressBgColor
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .weight(1.5f),
+                contentAlignment = Alignment.Center
             ) {
-                if (page > 0) {
-                    Button(
-                        onClick = { viewModel.previousPage() },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = if (page < pages.lastIndex) secondaryColor else primaryColor
-                        )
-                    ) {
-                        Text("Back", color = whiteText)
-                    }
-                } else {
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-
-                Button(
-                    onClick = {
-                        if (page < pages.lastIndex)
-                            viewModel.nextPage()
-                        else
-                            viewModel.finishOnboarding(navigateToLogin)
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = if (page < pages.lastIndex) secondaryColor else primaryColor
-                    )
-                ) {
-                    Text(
-                        text = if (page < pages.lastIndex) "Next" else "Get Started",
-                        color = whiteText
-                    )
-                }
+                Image(
+                    painter = painterResource(id = pages[page].image),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(0.85f),
+                    contentScale = ContentScale.Fit
+                )
             }
 
+            // 2. Text Content Area
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = pages[page].title,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Black,
+                    color = DeepBlue,
+                    textAlign = TextAlign.Center,
+                    lineHeight = 34.sp
+                )
 
+                Spacer(modifier = Modifier.height(16.dp))
 
+                Text(
+                    text = pages[page].description,
+                    fontSize = 16.sp,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Center,
+                    lineHeight = 24.sp
+                )
+            }
+
+            // 3. Bottom Controls Area
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Indicators
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    repeat(pages.size) { index ->
+                        val isSelected = index == page
+                        Box(
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .height(8.dp)
+                                .width(if (isSelected) 24.dp else 8.dp)
+                                .clip(CircleShape)
+                                .background(if (isSelected) ElectricBlue else Color.LightGray.copy(0.5f))
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                // Navigation Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (page > 0) {
+                        OutlinedButton(
+                            onClick = { viewModel.previousPage() },
+                            modifier = Modifier.weight(1f).height(56.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            border = BorderStroke(1.dp, Color.LightGray.copy(0.4f))
+                        ) {
+                            Text("Back", color = DeepBlue, fontWeight = FontWeight.Bold)
+                        }
+                    }
+
+                    Button(
+                        onClick = {
+                            if (isLastPage) viewModel.finishOnboarding(navigateToLogin)
+                            else viewModel.nextPage()
+                        },
+                        modifier = Modifier
+                            .weight(if (page > 0) 2.5f else 1f)
+                            .height(56.dp)
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color(0xFFC562FB),
+                                        Color(0xFF8F59FD),
+                                        Color(0xFF6236FF)
+                                    )
+                                ),
+                                shape = RoundedCornerShape(16.dp)
+                            ),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent
+                        ),
+                        contentPadding = PaddingValues(0.dp)
+                    )  {
+                        Text(
+                            text = if (isLastPage) "Get Started" else "Continue",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+            }
         }
     }
-
 }
