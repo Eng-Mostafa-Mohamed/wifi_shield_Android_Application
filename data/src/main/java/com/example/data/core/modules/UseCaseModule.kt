@@ -1,14 +1,9 @@
 package com.example.data.core.modules
 
-import com.example.domain.repo.DevicesRepository
 import com.example.domain.repo.IpReportRepository
 import com.example.domain.repo.PublicIpRepository
 import com.example.domain.repo.UserRepository
 import com.example.domain.useCases.AddUser
-import com.example.domain.useCases.BlockDeviceUseCase
-import com.example.domain.useCases.DeleteDeviceUseCase
-import com.example.domain.useCases.GetBlockedDevicesUseCase
-import com.example.domain.useCases.GetConnectedDevicesUseCase
 import com.example.domain.useCases.GetIpReportUseCase
 import com.example.domain.useCases.GetPublicIpUseCase
 import com.example.domain.useCases.GetUserEmailUseCase
@@ -17,7 +12,6 @@ import com.example.domain.useCases.LoginUseCase
 import com.example.domain.useCases.RegisterUseCase
 import com.example.domain.useCases.ResetPasswordUseCase
 import com.example.domain.useCases.RouterLoginUseCase
-import com.example.domain.useCases.UnBlockDeviceUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,29 +35,7 @@ object UseCaseModule {
     fun provideLoginUseCase(repository: UserRepository): LoginUseCase =
         LoginUseCase(repository)
 
-    @Provides
-    @Singleton
-    fun provideGetDevicesUseCase(repository: DevicesRepository): GetConnectedDevicesUseCase =
-        GetConnectedDevicesUseCase(repository)
 
-    @Provides
-    @Singleton
-    fun provideGetBlockedUseCase(repository: DevicesRepository): GetBlockedDevicesUseCase =
-        GetBlockedDevicesUseCase(repository)
-
-    @Provides
-    @Singleton
-    fun provideBlockDeviceUseCase(repository: DevicesRepository): BlockDeviceUseCase =
-        BlockDeviceUseCase(repository)
-
-    @Provides
-    @Singleton
-    fun provideUnBLockDeviceUseCase(repository: DevicesRepository): UnBlockDeviceUseCase =
-        UnBlockDeviceUseCase(repository)
-    @Provides
-    @Singleton
-    fun provideDeleteDeviceUseCase(repository: DevicesRepository): DeleteDeviceUseCase =
-        DeleteDeviceUseCase(repository)
     @Provides
     @Singleton
     fun provideRouterLoginUseCase(repository: UserRepository): RouterLoginUseCase =

@@ -40,6 +40,12 @@ val blueBrush = Brush.horizontalGradient(
         Color(0xFF8f59fd),
         Color(0xFFb560f9),
         Color(0xFFc562fb),
-
+    )
+)
+val buttonBrush = Brush.horizontalGradient(
+    colors = listOf(
+        Color(0xFFc562fb),
+        Color(0xFFb560f9),
+        Color(0xFFc562fb),
     )
 )

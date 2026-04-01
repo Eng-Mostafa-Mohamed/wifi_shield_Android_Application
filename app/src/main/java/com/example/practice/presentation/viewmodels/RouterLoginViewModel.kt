@@ -20,28 +20,32 @@ class RouterLoginViewModel @Inject constructor(
     var state by mutableStateOf(RouterLoginUiState())
         private set
 
-    fun login(email: String, password: String) {
+    fun login(routerUser: String, routerPass: String) {
+
+        if (routerUser.isBlank() || routerPass.isBlank()) {
+            state = state.copy(error = "Please fill all router fields")
+            return
+        }
 
         viewModelScope.launch {
 
             state = state.copy(isLoading = true, error = null)
 
-            val result = loginUseCase(email, password)
+            val result = loginUseCase(routerUser, routerPass)
 
-            result.onSuccess { token ->
+            result.onSuccess { message ->
                 state = state.copy(
                     isLoading = false,
-                    token = token
+                    token = message
                 )
             }
 
             result.onFailure { exception ->
                 state = state.copy(
                     isLoading = false,
-                    error = exception.message
+                    error = exception.message ?: "Failed to connect to server"
                 )
             }
         }
     }
 }
-

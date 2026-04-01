@@ -6,7 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.* // استخدام Material 3 الموحد
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,11 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.practice.SetStatusBarColor
 import com.example.practice.presentation.viewmodels.OnboardingViewModel
-import com.example.practice.ui.theme.dark_blue
-
-// الألوان الموحدة للتطبيق بالكامل
-val DeepBlue = Color(0xFF0F172A)
-val ElectricBlue = Color(0xFF3B82F6)
 
 data class OnboardingPage(
     val image: Int,
@@ -39,28 +34,33 @@ fun OnboardingScreen(
     viewModel: OnboardingViewModel,
     navigateToLogin: () -> Unit
 ) {
+    val primaryColor = Color(0xFF1c1b69)
+
     val pages = listOf(
         OnboardingPage(
             com.example.practice.R.drawable.img3,
-            "Secure Your Network",
-            "Keep your WiFi safe from unauthorized devices and potential threats."
+            "Control Access Easily",
+            "Block or allow devices instantly, giving you full control over your WiFi."
         ),
+
         OnboardingPage(
             com.example.practice.R.drawable.img1,
-            "Monitor Connected Devices",
-            "See all devices connected to your network in real-time and track usage."
+            "Control Access Easily",
+            "Block or allow devices instantly, giving you full control over your WiFi."
         ),
         OnboardingPage(
             com.example.practice.R.drawable.img2,
-            "Control Access Easily",
-            "Block or allow devices instantly, giving you full control over your WiFi."
-        )
+            "Secure Your Network",
+            "Keep your WiFi safe from unauthorized devices and potential threats."
+        ),
+
+
     )
 
     val page = viewModel.currentPage
     val isLastPage = page == pages.lastIndex
 
-    SetStatusBarColor(color = dark_blue,darkIcons = false)
+    SetStatusBarColor(color = primaryColor, darkIcons = false)
 
     Scaffold(
         containerColor = Color.White,
@@ -87,7 +87,6 @@ fun OnboardingScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // 1. Illustration Area
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -102,7 +101,6 @@ fun OnboardingScreen(
                 )
             }
 
-            // 2. Text Content Area
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -113,7 +111,7 @@ fun OnboardingScreen(
                     text = pages[page].title,
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Black,
-                    color = DeepBlue,
+                    color = primaryColor,
                     textAlign = TextAlign.Center,
                     lineHeight = 34.sp
                 )
@@ -129,12 +127,10 @@ fun OnboardingScreen(
                 )
             }
 
-            // 3. Bottom Controls Area
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Indicators
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
@@ -147,14 +143,13 @@ fun OnboardingScreen(
                                 .height(8.dp)
                                 .width(if (isSelected) 24.dp else 8.dp)
                                 .clip(CircleShape)
-                                .background(if (isSelected) ElectricBlue else Color.LightGray.copy(0.5f))
+                                .background(if (isSelected) primaryColor else Color.LightGray.copy(0.5f))
                         )
                     }
                 }
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                // Navigation Buttons
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -167,7 +162,7 @@ fun OnboardingScreen(
                             shape = RoundedCornerShape(16.dp),
                             border = BorderStroke(1.dp, Color.LightGray.copy(0.4f))
                         ) {
-                            Text("Back", color = DeepBlue, fontWeight = FontWeight.Bold)
+                            Text("Back", color = primaryColor, fontWeight = FontWeight.Bold)
                         }
                     }
 
@@ -182,9 +177,8 @@ fun OnboardingScreen(
                             .background(
                                 brush = Brush.verticalGradient(
                                     colors = listOf(
-                                        Color(0xFFC562FB),
-                                        Color(0xFF8F59FD),
-                                        Color(0xFF6236FF)
+                                        primaryColor,
+                                        primaryColor.copy(alpha = 0.8f)
                                     )
                                 ),
                                 shape = RoundedCornerShape(16.dp)

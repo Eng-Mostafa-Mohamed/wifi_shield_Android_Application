@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -23,14 +22,12 @@ import com.example.practice.R
 import com.example.practice.SetStatusBarColor
 import kotlinx.coroutines.delay
 
-val DeepBlue = Color(0xFF0F172A)
-val ElectricBlue = Color(0xFF3B82F6)
-val SoftPurple = Color(0xFF8B5CF6)
-val CardBg = Color(0xFFF8FAFC)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FullWifiSettingsScreen(navController: NavController) {
+
+    val primaryColor = Color(0xFF1c1b69)
+    val cardBg = Color(0xFFF8FAFC)
 
     var ssid24 by remember { mutableStateOf("Home_Wifi") }
     var pass24 by remember { mutableStateOf("Mostafa11100@") }
@@ -41,11 +38,9 @@ fun FullWifiSettingsScreen(navController: NavController) {
     var hidden5G by remember { mutableStateOf(false) }
 
     var firewallEnabled by remember { mutableStateOf(true) }
-
     var isSyncing by remember { mutableStateOf(false) }
 
     SetStatusBarColor(color = Color.White, darkIcons = true)
-
 
     LaunchedEffect(isSyncing) {
         if (isSyncing) {
@@ -58,12 +53,13 @@ fun FullWifiSettingsScreen(navController: NavController) {
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
-                    title = { Text("NETWORK CORE", fontWeight = FontWeight.Black, letterSpacing = 2.sp, fontSize = 18.sp) },
+                    title = { Text("NETWORK CORE", fontWeight = FontWeight.Black, letterSpacing = 2.sp, fontSize = 18.sp, color = primaryColor) },
                     navigationIcon = {
                         IconButton(onClick = { navController.navigate("Main") }) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = null)
+                            Icon(Icons.Default.ArrowBack, contentDescription = null, tint = primaryColor)
                         }
-                    }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
                 )
             }
         ) { padding ->
@@ -75,33 +71,33 @@ fun FullWifiSettingsScreen(navController: NavController) {
                 contentPadding = PaddingValues(20.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
-                item { FirewallCard(enabled = firewallEnabled, onToggle = { firewallEnabled = it }) }
+                item { FirewallCard(enabled = firewallEnabled, onToggle = { firewallEnabled = it }, primaryColor = primaryColor) }
 
                 item {
                     NetworkCard(
                         frequency = "2.4",
-                        gradient = Brush.linearGradient(listOf(ElectricBlue, SoftPurple)),
                         ssid = ssid24,
                         onSsidChange = { ssid24 = it },
                         pass = pass24,
                         onPassChange = { pass24 = it },
                         isHidden = hidden24,
                         onHiddenToggle = { hidden24 = it },
-                        tintColor = ElectricBlue
+                        tintColor = primaryColor,
+                        cardBg = cardBg
                     )
                 }
 
                 item {
                     NetworkCard(
                         frequency = "5.0",
-                        gradient = Brush.linearGradient(listOf(SoftPurple, Color(0xFFEC4899))),
                         ssid = ssid5G,
                         onSsidChange = { ssid5G = it },
                         pass = pass5G,
                         onPassChange = { pass5G = it },
                         isHidden = hidden5G,
                         onHiddenToggle = { hidden5G = it },
-                        tintColor = SoftPurple
+                        tintColor = primaryColor,
+                        cardBg = cardBg
                     )
                 }
 
@@ -113,7 +109,7 @@ fun FullWifiSettingsScreen(navController: NavController) {
                             .height(65.dp)
                             .padding(top = 8.dp),
                         shape = RoundedCornerShape(20.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = DeepBlue),
+                        colors = ButtonDefaults.buttonColors(containerColor = primaryColor),
                         enabled = !isSyncing
                     ) {
                         if (isSyncing) {
@@ -127,7 +123,6 @@ fun FullWifiSettingsScreen(navController: NavController) {
                 }
             }
         }
-
 
         if (isSyncing) {
             Box(
@@ -145,9 +140,9 @@ fun FullWifiSettingsScreen(navController: NavController) {
                         modifier = Modifier.padding(24.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        CircularProgressIndicator(color = ElectricBlue)
+                        CircularProgressIndicator(color = primaryColor)
                         Spacer(Modifier.height(16.dp))
-                        Text("Applying Settings...", fontWeight = FontWeight.Bold, color = DeepBlue)
+                        Text("Applying Settings...", fontWeight = FontWeight.Bold, color = primaryColor)
                     }
                 }
             }
@@ -155,13 +150,12 @@ fun FullWifiSettingsScreen(navController: NavController) {
     }
 }
 
-
 @Composable
-fun FirewallCard(enabled: Boolean, onToggle: (Boolean) -> Unit) {
+fun FirewallCard(enabled: Boolean, onToggle: (Boolean) -> Unit, primaryColor: Color) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = if (enabled) Color(0xFFECFDF5) else Color(0xFFFEF2F2))
+        colors = CardDefaults.cardColors(containerColor = if (enabled) Color(0xFFF0FDF4) else Color(0xFFFEF2F2))
     ) {
         Row(
             modifier = Modifier.padding(20.dp),
@@ -175,41 +169,47 @@ fun FirewallCard(enabled: Boolean, onToggle: (Boolean) -> Unit) {
             }
             Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text("System Firewall", fontWeight = FontWeight.Bold, color = DeepBlue)
+                Text("System Firewall", fontWeight = FontWeight.Bold, color = primaryColor)
                 Text(if (enabled) "Shield Active" else "Shield Disabled", fontSize = 12.sp, color = Color.Gray)
             }
-            Switch(checked = enabled, onCheckedChange = onToggle)
+            Switch(
+                checked = enabled,
+                onCheckedChange = onToggle,
+                colors = SwitchDefaults.colors(
+                    checkedTrackColor = primaryColor,
+                    checkedThumbColor = Color.White
+                )
+            )
         }
     }
 }
 
-
-
 @Composable
 fun NetworkCard(
     frequency: String,
-    gradient: Brush,
     ssid: String,
     onSsidChange: (String) -> Unit,
     pass: String,
     onPassChange: (String) -> Unit,
     isHidden: Boolean,
     onHiddenToggle: (Boolean) -> Unit,
-    tintColor: Color
+    tintColor: Color,
+    cardBg: Color
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(CardBg, RoundedCornerShape(32.dp))
+            .background(cardBg, RoundedCornerShape(32.dp))
             .border(1.dp, Color.LightGray.copy(0.3f), RoundedCornerShape(32.dp))
             .padding(24.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier.background(gradient, RoundedCornerShape(12.dp)).padding(horizontal = 12.dp, vertical = 6.dp)) {
+            // التعديل هنا: استخدام لون صريح بدلاً من Gradient
+            Box(modifier = Modifier.background(tintColor, RoundedCornerShape(12.dp)).padding(horizontal = 12.dp, vertical = 6.dp)) {
                 Text("${frequency}GHz", color = Color.White, fontWeight = FontWeight.Black, fontSize = 12.sp)
             }
             Spacer(Modifier.width(12.dp))
-            Text("Band Configuration", fontWeight = FontWeight.Bold, color = DeepBlue)
+            Text("Band Configuration", fontWeight = FontWeight.Bold, color = tintColor)
         }
 
         Spacer(Modifier.height(24.dp))
@@ -224,22 +224,21 @@ fun NetworkCard(
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text("Security Type", color = Color.Gray, fontSize = 14.sp)
-            Text("WPA2-PSK (Personal)", fontWeight = FontWeight.Bold, color = DeepBlue, fontSize = 14.sp)
+            Text("WPA2-PSK (Personal)", fontWeight = FontWeight.Bold, color = tintColor, fontSize = 14.sp)
         }
 
         HorizontalDivider(Modifier.padding(vertical = 16.dp), color = Color.LightGray.copy(0.4f))
 
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-            Checkbox(checked = isHidden, onCheckedChange = onHiddenToggle)
-            Text("Hide network from public scan", fontSize = 14.sp, color = DeepBlue)
+            Checkbox(
+                checked = isHidden,
+                onCheckedChange = onHiddenToggle,
+                colors = CheckboxDefaults.colors(checkedColor = tintColor)
+            )
+            Text("Hide network from public scan", fontSize = 14.sp, color = tintColor)
         }
     }
 }
-
-
-
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -263,7 +262,8 @@ fun SettingsTextField(label: String, value: String, onValueChange: (String) -> U
                 focusedBorderColor = tintColor,
                 unfocusedBorderColor = Color.LightGray.copy(0.5f),
                 focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White
+                unfocusedContainerColor = Color.White,
+                focusedLabelColor = tintColor
             ),
             singleLine = true
         )

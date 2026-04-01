@@ -8,15 +8,14 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import com.example.practice.ui.theme.blue
-import com.example.practice.ui.theme.dark_blue
-import com.example.practice.ui.theme.secondaryColor
+import com.example.practice.ui.theme.primaryColor
 
 
 @Composable
 fun ClickableTextCustom(
     fullText: String,
     clickableText: String,
-    clickableColor: Color =blue,
+    clickableColor: Color =primaryColor,
     onClick: () -> Unit
 ) {
     val annotatedText = buildAnnotatedString {

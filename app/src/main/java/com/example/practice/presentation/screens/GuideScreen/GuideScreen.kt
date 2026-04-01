@@ -8,7 +8,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -16,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,9 +25,9 @@ import com.example.practice.ui.theme.*
 
 @Composable
 fun GuideScreen() {
+    val primaryColor = Color(0xFF1c1b69)
 
-
-    SetStatusBarColor(color = dark_blue, false)
+    SetStatusBarColor(color = primaryColor, false)
 
     Column(
         modifier = Modifier
@@ -41,7 +39,7 @@ fun GuideScreen() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(blueBrush) // Using your blueBrush from theme
+                .background(primaryColor)
                 .padding(top = 40.dp, bottom = 40.dp, start = 24.dp, end = 24.dp)
         ) {
             Column(horizontalAlignment = Alignment.Start) {
@@ -90,32 +88,35 @@ fun GuideScreen() {
                 fontFamily = titleFont,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = dark_blue
+                color = primaryColor // تغيير اللون هنا
             )
 
-            // Modern Security Tips
             SecurityTipCardPremium(
                 icon = R.drawable.lock_ic,
                 title = "WPA3 Encryption",
-                description = "Always use WPA2 or WPA3 encryption on your Wi-Fi network to prevent unauthorized access. Avoid using outdated protocols like WEP, which are easy to hack. Regularly update your router’s firmware to patch security vulnerabilities."
+                description = "Always use WPA2 or WPA3 encryption on your Wi-Fi network to prevent unauthorized access. Avoid using outdated protocols like WEP, which are easy to hack. Regularly update your router’s firmware to patch security vulnerabilities.",
+                tintColor = primaryColor
             )
 
             SecurityTipCardPremium(
                 icon = R.drawable.router_ic,
                 title = "Admin Credentials",
-                description = "Change your router’s default password immediately. Use a strong, unique password that includes uppercase, lowercase, numbers, and symbols. Update passwords periodically, and avoid sharing them publicly."
+                description = "Change your router’s default password immediately. Use a strong, unique password that includes uppercase, lowercase, numbers, and symbols. Update passwords periodically, and avoid sharing them publicly.",
+                tintColor = primaryColor
             )
 
             SecurityTipCardPremium(
                 icon = R.drawable.visibility_off,
                 title = "WPS Security",
-                description = "Turn off WPS (Wi-Fi Protected Setup) because it can expose your network to attacks such as brute-force PIN cracking. Instead, manually connect new devices using a strong Wi-Fi password."
+                description = "Turn off WPS (Wi-Fi Protected Setup) because it can expose your network to attacks such as brute-force PIN cracking. Instead, manually connect new devices using a strong Wi-Fi password.",
+                tintColor = primaryColor
             )
 
             SecurityTipCardPremium(
                 icon = R.drawable.wifi_off,
                 title = "SSID Management",
-                description = "Hiding your SSID can prevent casual users from seeing your network name. Combine SSID hiding with strong encryption and segment your network into separate VLANs for IoT devices."
+                description = "Hiding your SSID can prevent casual users from seeing your network name. Combine SSID hiding with strong encryption and segment your network into separate VLANs for IoT devices.",
+                tintColor = primaryColor
             )
         }
 
@@ -127,7 +128,8 @@ fun GuideScreen() {
 fun SecurityTipCardPremium(
     icon: Int,
     title: String,
-    description: String
+    description: String,
+    tintColor: Color // استلام اللون من الأب
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -135,7 +137,7 @@ fun SecurityTipCardPremium(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
-            .background(bg_gray.copy(alpha = 0.5f))
+            .background(Color(0xFFF1F5F9)) // لون رمادي فاتح جداً للهلفية
             .clickable { isExpanded = !isExpanded }
             .padding(20.dp)
     ) {
@@ -143,7 +145,6 @@ fun SecurityTipCardPremium(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            // Icon
             Box(
                 modifier = Modifier
                     .size(44.dp)
@@ -153,24 +154,22 @@ fun SecurityTipCardPremium(
                 Icon(
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    tint = move,
+                    tint = tintColor, // اللون الكحلي للأيقونات
                     modifier = Modifier.size(22.dp)
                 )
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Title
             Text(
                 text = title,
                 modifier = Modifier.weight(1f),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = dark_blue,
+                color = tintColor, // اللون الكحلي للعنوان
                 fontFamily = titleFont
             )
 
-            // Arrow
             Icon(
                 painter = if (isExpanded) painterResource(id = R.drawable.expand_less_116842) else
                     painterResource(id = R.drawable.expand_more_119176),

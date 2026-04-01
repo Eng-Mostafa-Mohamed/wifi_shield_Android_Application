@@ -3,7 +3,6 @@ package com.example.practice.presentation.screens.AuthScreen
 import ClickableTextCustom
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -21,7 +20,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,14 +31,7 @@ import com.example.practice.R
 import com.example.practice.SetStatusBarColor
 import com.example.practice.presentation.viewmodels.ForgotPasswordViewModel
 import com.example.practice.ui.theme.HeaderFont
-import com.example.practice.ui.theme.blue
-import com.example.practice.ui.theme.blueBrush
-import com.example.practice.ui.theme.dark_blue
-import com.example.practice.ui.theme.move
-import com.example.practice.ui.theme.secondaryColor
-import com.example.practice.ui.theme.titleFont
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -54,7 +45,9 @@ fun ForgotPasswordScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    SetStatusBarColor(color = dark_blue, false)
+    val primaryBlue = Color(0xFF1c1b69)
+
+    SetStatusBarColor(color = primaryBlue, darkIcons = false)
 
     LaunchedEffect(Unit) {
         viewModel.event.collect { message ->
@@ -71,14 +64,13 @@ fun ForgotPasswordScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFc562fb))
+                .background(primaryBlue)
                 .pointerInput(Unit) {
                     detectTapGestures { keyboardController?.hide() }
                 }
                 .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
 
             Box(
                 modifier = Modifier
@@ -87,19 +79,20 @@ fun ForgotPasswordScreen(
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                Color(0xFF8f59fd),
-                                Color(0xFFb560f9),
-                                Color(0xFFc562fb),
+                                primaryBlue,
+                                primaryBlue.copy(alpha = 0.9f),
+                                primaryBlue.copy(alpha = 0.8f),
                             )
                         )
                     )
             ) {
 
                 Canvas(modifier = Modifier.size(200.dp).offset(x = 180.dp, y = (-50).dp)) {
-                    drawCircle(color = Color.White.copy(alpha = 0.1f))
+                    drawCircle(color = Color.White.copy(alpha = 0.05f))
                 }
 
                 Column(modifier = Modifier.padding(20.dp)) {
+                    Spacer(Modifier.height(30.dp))
 
                     Text(
                         text = "Forgot Password?",
@@ -113,14 +106,13 @@ fun ForgotPasswordScreen(
 
                     Text(
                         text = "We’ll send you a reset link",
-                        color = Color.White,
+                        color = Color.White.copy(alpha = 0.8f),
                         fontWeight = FontWeight.Bold,
                         fontFamily = HeaderFont,
                         fontSize = 16.sp
                     )
                 }
             }
-
 
             Card(
                 modifier = Modifier
@@ -146,7 +138,8 @@ fun ForgotPasswordScreen(
                         text = "Reset Now ",
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold,
-                        color =blue
+                        fontFamily = HeaderFont,
+                        color = primaryBlue
                     )
 
                     Spacer(Modifier.height(40.dp))
@@ -158,14 +151,15 @@ fun ForgotPasswordScreen(
                         onValueChange = viewModel::onEmailChange,
                         errorState = state.error,
                         iconRes = R.drawable.email_ic
-
                     )
 
                     Spacer(Modifier.height(24.dp))
 
                     MainButton(
                         text = "Send Reset Link",
-                        bgBrush = blueBrush
+                        bgBrush = Brush.horizontalGradient(
+                            colors = listOf(primaryBlue, Color(0xFF2E2C96))
+                        )
                     ) {
                         if (!state.isLoading) {
                             viewModel.onSendClick()
@@ -174,7 +168,7 @@ fun ForgotPasswordScreen(
 
                     Spacer(Modifier.height(16.dp))
 
-                    ClickableTextCustom(
+                    ClickableTextCustom(clickableColor = primaryBlue,
                         fullText = "Remember your password? ",
                         clickableText = "Log In"
                     ) {

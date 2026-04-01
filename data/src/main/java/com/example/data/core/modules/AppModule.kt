@@ -6,15 +6,16 @@ import com.example.data.core.RetrofitInstance
 import com.example.data.core.RouterApiService
 import com.example.data.core.UserDao
 import com.example.data.repoImpl.AuthRepositoryImpl
-import com.example.data.repoImpl.DevicesRepositoryImpl
+import com.example.data.repoImpl.DeviceSocketRepositoryImpl
 import com.example.data.repoImpl.IpReportRepositoryImpl
 import com.example.data.repoImpl.PublicIpRepositoryImpl
-import com.example.domain.repo.DevicesRepository
+import com.example.domain.repo.DeviceSocketRepository
 import com.example.domain.repo.IpReportRepository
 import com.example.domain.repo.PublicIpRepository
 import com.example.domain.repo.UserRepository
 import com.example.domain.useCases.GetPublicIpUseCase
 import com.google.firebase.auth.FirebaseAuth
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,11 +34,16 @@ object AppModule {
         PublicIpRepositoryImpl(api)
 
 
-    @Provides
-    fun provideGetDevicesRepository(
-        routerApi: RouterApiService,
-    ): DevicesRepository =
-        DevicesRepositoryImpl(routerApi)
+    @Module
+    @InstallIn(SingletonComponent::class)
+    abstract class SocketModule {
+
+        @Binds
+        @Singleton
+        abstract fun bindDeviceSocketRepository(
+            impl: DeviceSocketRepositoryImpl
+        ): DeviceSocketRepository
+    }
 
     @Provides
     fun provideIpReportRepository(

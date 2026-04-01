@@ -37,9 +37,16 @@ class RegisterViewModel @Inject constructor(
 
     fun register() {
         viewModelScope.launch {
-
-            if (state.value.email.isBlank() || state.value.password.length < 6) {
-                _event.emit("Invalid data")
+            if (state.value.name.isBlank()) {
+                _event.emit("Please enter your name")
+                return@launch
+            }
+            if (state.value.email.isBlank() || !state.value.email.contains("@")) {
+                _event.emit("Invalid email address")
+                return@launch
+            }
+            if (state.value.password.length < 6) {
+                _event.emit("Password must be at least 6 characters")
                 return@launch
             }
 
@@ -48,28 +55,25 @@ class RegisterViewModel @Inject constructor(
             runCatching {
                 registerUseCase(state.value.email, state.value.password)
             }.onSuccess {
-
                 val user = User(
                     email = state.value.email,
                     username = state.value.name
                 )
-
                 addUserUseCase(user)
 
                 _state.update {
                     it.copy(isLoading = false, isSuccess = true)
                 }
-
-                _event.emit("Registration Successful ")
+                _event.emit("Registration Successful")
 
             }.onFailure { exception ->
-
-                _state.update {
-                    it.copy(isLoading = false)
-                }
-
+                _state.update { it.copy(isLoading = false) }
                 _event.emit(exception.message ?: "Register failed")
             }
         }
+    }
+
+    fun resetState() {
+        _state.update { it.copy(isSuccess = false) }
     }
 }

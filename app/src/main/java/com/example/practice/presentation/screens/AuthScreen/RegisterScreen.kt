@@ -2,37 +2,29 @@ package com.example.practice.presentation.screens.AuthScreen
 
 import ClickableTextCustom
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.e_commerce.utils.MainButton
 import com.example.e_commerce.utils.MainTextField
-import androidx.navigation.NavController
 import com.example.practice.R
 import com.example.practice.SetStatusBarColor
 import com.example.practice.presentation.viewmodels.RegisterViewModel
-import com.example.practice.ui.theme.blue
-import com.example.practice.ui.theme.blueBrush
-import com.example.practice.ui.theme.dark_blue
-import com.example.practice.ui.theme.titleFont
-
-
+import com.example.practice.ui.theme.HeaderFont
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -43,52 +35,57 @@ fun RegisterScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
-    SetStatusBarColor(color = dark_blue,false)
+
+    val primaryBlue = Color(0xFF1c1b69)
+
+    SetStatusBarColor(color = Color.White, darkIcons = true)
+
     LaunchedEffect(Unit) {
         viewModel.event.collect { message ->
             snackbarHostState.showSnackbar(message)
         }
     }
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarHostState,
                 snackbar = { data ->
-                    androidx.compose.material3.Snackbar(
+                    Snackbar(
                         snackbarData = data,
-                        containerColor = Color.Black,
+                        containerColor = primaryBlue,
                         contentColor = Color.White,
-                        shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(8.dp)
                     )
                 }
             )
-        }
-
-    ) {padding ->
+        },
+        containerColor = Color.White
+    ) { padding ->
         Column(
             modifier = Modifier
-                .fillMaxSize().background(color = Color.White).
-                pointerInput(Unit) {
+                .fillMaxSize()
+                .background(color = Color.White)
+                .pointerInput(Unit) {
                     detectTapGestures(onTap = {
                         keyboardController?.hide()
                     })
                 }
-
                 .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-
+            verticalArrangement = Arrangement.Center
         ) {
 
             Text(
-                text = "Create  account",
-                fontSize = 25.sp,
+                text = "Create account",
+                fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = blue
+                fontFamily = HeaderFont,
+                color = primaryBlue
             )
-            Spacer(Modifier.height(30.dp))
+
+            Spacer(Modifier.height(40.dp))
 
             MainTextField(
                 label = "Full Name",
@@ -99,6 +96,8 @@ fun RegisterScreen(
                 iconRes = R.drawable.username_ic
             )
 
+            Spacer(Modifier.height(8.dp))
+
             MainTextField(
                 label = "Email",
                 placeholder = "Enter your email",
@@ -107,6 +106,8 @@ fun RegisterScreen(
                 errorState = null,
                 iconRes = R.drawable.email_ic
             )
+
+            Spacer(Modifier.height(8.dp))
 
             MainTextField(
                 label = "Password",
@@ -118,20 +119,20 @@ fun RegisterScreen(
                 isPassword = true
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(32.dp))
 
             val buttonEnabled = !state.isLoading
 
             MainButton(
-                text = "Register", bgBrush = blueBrush
-            )
-
-            {
+                text = "Register",
+                bgBrush = Brush.horizontalGradient(
+                    colors = listOf(primaryBlue, Color(0xFF2E2C96))
+                )
+            ) {
                 if (buttonEnabled) {
                     viewModel.register()
                 }
             }
-
 
             if (state.isSuccess) {
                 LaunchedEffect(Unit) {
@@ -139,15 +140,16 @@ fun RegisterScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
-            ClickableTextCustom(
+            Spacer(modifier = Modifier.height(24.dp))
+
+            ClickableTextCustom(clickableColor = primaryBlue,
                 fullText = "Already have an account? ",
                 clickableText = "Log in"
             ) {
                 navController.navigate("login")
             }
+
             Spacer(Modifier.height(30.dp))
         }
     }
-
 }

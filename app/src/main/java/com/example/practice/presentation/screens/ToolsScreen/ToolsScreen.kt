@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,25 +32,22 @@ import com.example.practice.ui.theme.*
 @Composable
 fun ToolsScreen(viewModel: ToolsViewModel = hiltViewModel()) {
     val ping by viewModel.ping.collectAsState()
+    val primaryColor = Color(0xFF1c1b69)
 
-    // Local state to manage the 'Testing' UI phase
     var isTesting by remember { mutableStateOf(false) }
 
-    // 1. ANIMATION: Pulsing/Breathing effect
-    val infiniteTransition = rememberInfiniteTransition(label = "pulse")
+    val infiniteTransition = rememberInfiniteTransition(label = "")
     val scale by infiniteTransition.animateFloat(
         initialValue = 1f,
         targetValue = if (isTesting) 1.12f else 1.05f,
         animationSpec = infiniteRepeatable(
             animation = tween(1000, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
-        ), label = "scale"
+        ), label = ""
     )
 
-    // Set Status Bar to match Auth/Hub style
     SetStatusBarColor(color = Color.White, darkIcons = true)
 
-    // Automatically stop ripple animation when ping result returns
     LaunchedEffect(ping) {
         if (ping != null) {
             isTesting = false
@@ -63,14 +61,13 @@ fun ToolsScreen(viewModel: ToolsViewModel = hiltViewModel()) {
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // --- HEADER ---
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = "Ping Diagnostic",
                 fontFamily = titleFont,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                color = dark_blue
+                color = primaryColor
             )
             Text(
                 text = if (isTesting) "Analyzing network path..." else "Tap to test latency",
@@ -82,10 +79,8 @@ fun ToolsScreen(viewModel: ToolsViewModel = hiltViewModel()) {
 
         Spacer(modifier = Modifier.weight(0.6f))
 
-        // --- 2. THE ANIMATED SPHERE ---
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
 
-            // SONAR RIPPLES: Visualizing the "Ping" signal
             if (isTesting) {
                 repeat(3) { i ->
                     val rippleScale by infiniteTransition.animateFloat(
@@ -94,18 +89,17 @@ fun ToolsScreen(viewModel: ToolsViewModel = hiltViewModel()) {
                         animationSpec = infiniteRepeatable(
                             animation = tween(2200, delayMillis = i * 600),
                             repeatMode = RepeatMode.Restart
-                        ), label = "ripple"
+                        ), label = ""
                     )
                     Box(
                         Modifier
                             .size(160.dp)
                             .scale(rippleScale)
-                            .background(blue.copy(alpha = 1f - (rippleScale / 2.8f)), CircleShape)
+                            .background(primaryColor.copy(alpha = 1f - (rippleScale / 2.8f)), CircleShape)
                     )
                 }
             }
 
-            // MAIN SPHERE: The Interactive Image
             Box(
                 modifier = Modifier
                     .size(200.dp)
@@ -113,10 +107,13 @@ fun ToolsScreen(viewModel: ToolsViewModel = hiltViewModel()) {
                     .shadow(
                         elevation = 25.dp,
                         shape = CircleShape,
-                        spotColor = blue,
-                        ambientColor = blue
+                        spotColor = primaryColor,
+                        ambientColor = primaryColor
                     )
-                    .background(blueBrush, CircleShape)
+                    .background(
+                        brush = Brush.verticalGradient(listOf(primaryColor, Color(0xFF2E2C96))),
+                        shape = CircleShape
+                    )
                     .clip(CircleShape)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
@@ -140,26 +137,24 @@ fun ToolsScreen(viewModel: ToolsViewModel = hiltViewModel()) {
 
         Spacer(modifier = Modifier.weight(0.4f))
 
-        // --- 3. THE FLOATING RESULT CARD ---
-        // Hidden during testing, shown when result is SUCCESS/FAILED
         AnimatedVisibility(
             visible = ping != null && !isTesting,
             enter = slideInVertically(initialOffsetY = { it / 2 }) + fadeIn(),
             exit = shrinkVertically() + fadeOut()
         ) {
             ping?.let { data ->
-                ResultDisplayCard(data)
+                ResultDisplayCard(data, primaryColor)
             }
         }
     }
 }
 
 @Composable
-fun ResultDisplayCard(data: com.example.domain.dataClasses.PingResult) { // Adjusted based on your likely package
+fun ResultDisplayCard(data: com.example.domain.dataClasses.PingResult, primaryColor: Color) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(bg_gray.copy(alpha = 0.7f), RoundedCornerShape(32.dp))
+            .background(Color(0xFFF1F5F9), RoundedCornerShape(32.dp))
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -177,18 +172,15 @@ fun ResultDisplayCard(data: com.example.domain.dataClasses.PingResult) { // Adju
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                ResultColumn(label = "AVG", value = "${data.averageLatency}ms", color = move)
-                // Divider
+                ResultColumn(label = "AVG", value = "${data.averageLatency}ms", color = primaryColor)
                 Box(Modifier.width(1.dp).height(30.dp).background(Color.LightGray).align(Alignment.CenterVertically))
                 ResultColumn(label = "MIN", value = "${data.minLatency}ms", color = Color.DarkGray)
-                // Divider
                 Box(Modifier.width(1.dp).height(30.dp).background(Color.LightGray).align(Alignment.CenterVertically))
                 ResultColumn(label = "MAX", value = "${data.maxLatency}ms", color = Color.DarkGray)
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Connection Status Badge
             Box(
                 modifier = Modifier
                     .background(Color.White, RoundedCornerShape(12.dp))
@@ -196,7 +188,7 @@ fun ResultDisplayCard(data: com.example.domain.dataClasses.PingResult) { // Adju
             ) {
                 Text(
                     text = "Stable Connection",
-                    color = Color(0xFF10B981), // Emerald green
+                    color = Color(0xFF10B981),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.ExtraBold
                 )

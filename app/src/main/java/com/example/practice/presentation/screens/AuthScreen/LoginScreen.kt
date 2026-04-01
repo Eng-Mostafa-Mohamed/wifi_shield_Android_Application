@@ -3,7 +3,6 @@ package com.example.practice.presentation.screens.AuthScreen
 import ClickableTextCustom
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -13,8 +12,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -31,11 +28,6 @@ import com.example.practice.SetStatusBarColor
 import com.example.practice.presentation.LoginEvent
 import com.example.practice.presentation.viewmodels.LoginViewModel
 import com.example.practice.ui.theme.HeaderFont
-import com.example.practice.ui.theme.blue
-import com.example.practice.ui.theme.blueBrush
-import com.example.practice.ui.theme.dark_blue
-import com.example.practice.ui.theme.move
-
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -47,8 +39,9 @@ fun LoginScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    // Status bar matches the new Deep Midnight background
-    SetStatusBarColor(color = Color(0xFF101828), darkIcons = false)
+    val primaryBlue = Color(0xFF1c1b69)
+
+    SetStatusBarColor(color = primaryBlue, darkIcons = false)
 
     LaunchedEffect(Unit) {
         viewModel.event.collect { event ->
@@ -64,14 +57,17 @@ fun LoginScreen(
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
     ) { padding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(blueBrush)
+                .background(primaryBlue)
                 .pointerInput(Unit) {
-                    detectTapGestures(onTap = { keyboardController?.hide() })
+                    detectTapGestures { keyboardController?.hide() }
                 }
                 .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -80,20 +76,24 @@ fun LoginScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(240.dp)
-                    .shadow(20.dp, RoundedCornerShape(28.dp), ambientColor = move, spotColor = move)
+                    .height(220.dp)
                     .background(
-                        brush = blueBrush,
-                        shape = RoundedCornerShape(28.dp)
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                primaryBlue,
+                                primaryBlue.copy(alpha = 0.9f),
+                                primaryBlue.copy(alpha = 0.8f),
+                            )
+                        )
                     )
-                    ,
-                contentAlignment = Alignment.CenterStart
             ) {
 
                 Canvas(modifier = Modifier.size(200.dp).offset(x = 180.dp, y = (-50).dp)) {
-                    drawCircle(color = Color.White.copy(alpha = 0.1f))
+                    drawCircle(color = Color.White.copy(alpha = 0.05f))
                 }
-                Column(modifier = Modifier.padding(horizontal = 32.dp)) {
+
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Spacer(modifier = Modifier.height(30.dp))
                     Text(
                         text = "WIFI SHIELD",
                         color = Color.White,
@@ -110,17 +110,16 @@ fun LoginScreen(
                     )
                     Text(
                         text = "Login to monitor your network protection.",
-                        color = Color.White.copy(alpha = 0.6f), // Softer white
+                        color = Color.White.copy(alpha = 0.7f),
                         fontSize = 14.sp
                     )
                 }
             }
 
-
             Card(
                 modifier = Modifier.fillMaxSize(),
                 shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White) // Clean White
+                colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
                 Column(
                     modifier = Modifier
@@ -134,7 +133,8 @@ fun LoginScreen(
                         text = "Welcome back!",
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold,
-                        color = blue
+                        fontFamily = HeaderFont,
+                        color = primaryBlue
                     )
 
                     Spacer(Modifier.height(32.dp))
@@ -163,10 +163,9 @@ fun LoginScreen(
                     Spacer(Modifier.height(12.dp))
 
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
-                        ClickableTextCustom(
+                        ClickableTextCustom(clickableColor = primaryBlue,
                             fullText = "",
                             clickableText = "Recovery Access?",
-                            // Ensure ClickableTextCustom inside uses Color(0xFF0284C7)
                         ) {
                             navController.navigate("resetPass")
                         }
@@ -176,20 +175,21 @@ fun LoginScreen(
 
                     MainButton(
                         text ="UNLOCK SHIELD",
-                        bgBrush =blueBrush
+                        bgBrush = Brush.horizontalGradient(
+                            colors = listOf(primaryBlue, Color(0xFF2E2C96))
+                        )
                     ) {
                         if (!state.isLoading) viewModel.login()
                     }
 
                     Spacer(Modifier.weight(1f))
 
-                    // Footer
                     Row(
                         modifier = Modifier.padding(bottom = 32.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text("New to Shield? ", color = Color(0xFF667085))
-                        ClickableTextCustom(
+                        ClickableTextCustom(clickableColor = primaryBlue,
                             fullText = "",
                             clickableText = "Create Identity"
                         ) {

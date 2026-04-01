@@ -20,7 +20,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Practice"
+rootProject.name = "Wifi Shield"
 include(":app")
 include(":domain")
 include(":data")

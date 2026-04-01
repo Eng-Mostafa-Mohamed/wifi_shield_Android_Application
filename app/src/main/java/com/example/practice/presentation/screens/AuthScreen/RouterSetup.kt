@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -20,11 +22,8 @@ import com.example.e_commerce.utils.MainButton
 import com.example.e_commerce.utils.MainTextField
 import com.example.practice.R
 import com.example.practice.SetStatusBarColor
-import com.example.practice.ui.theme.blueBrush
-import com.example.practice.ui.theme.dark_blue
-import com.example.practice.ui.theme.titleFont
 import com.example.practice.presentation.viewmodels.RouterLoginViewModel
-import com.example.practice.ui.theme.blue
+import com.example.practice.ui.theme.HeaderFont
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnrememberedMutableState")
@@ -40,16 +39,17 @@ fun RouterSetup(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
-    SetStatusBarColor(color = dark_blue, false)
 
-    // Local states for input fields
+    val primaryBlue = Color(0xFF1c1b69)
+
+    SetStatusBarColor(color = Color.White, darkIcons = true)
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     val emailState = remember { mutableStateOf(email) }
     val passwordState = remember { mutableStateOf(password) }
 
-    // Show error snackbar or navigate on success
     LaunchedEffect(state) {
         state.error?.let { msg ->
             scope.launch { snackbarHostState.showSnackbar(msg) }
@@ -67,13 +67,14 @@ fun RouterSetup(
                 snackbar = { data ->
                     Snackbar(
                         snackbarData = data,
-                        containerColor = Color.Black,
+                        containerColor = primaryBlue,
                         contentColor = Color.White,
-                        shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(8.dp)
                     )
                 }
             )
-        }
+        },
+        containerColor = Color.White
     ) { padding ->
         Column(
             modifier = Modifier
@@ -91,15 +92,14 @@ fun RouterSetup(
 
             Text(
                 text = "Connect Router",
-                fontSize = 31.sp,
-                fontWeight = FontWeight.Medium,
-                fontFamily = titleFont,
-                color = Color.Black
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = HeaderFont,
+                color = primaryBlue
             )
 
-            Spacer(Modifier.height(30.dp))
+            Spacer(Modifier.height(40.dp))
 
-            // Username field
             MainTextField(
                 label = "Username",
                 placeholder = "Enter Router Username",
@@ -111,10 +111,6 @@ fun RouterSetup(
 
             Spacer(Modifier.height(16.dp))
 
-
-
-
-            // Password field
             MainTextField(
                 label = "Password",
                 placeholder = "Enter Router password",
@@ -125,26 +121,23 @@ fun RouterSetup(
                 isPassword = true
             )
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(32.dp))
 
-
-
-
-
-
-            // Connect button
             MainButton(
                 text = if (state.isLoading) "Connecting..." else "Connect",
-                bgBrush = blueBrush,
+                bgBrush = Brush.horizontalGradient(
+                    colors = listOf(primaryBlue, Color(0xFF2E2C96))
+                ),
                 onClick = { viewModel.login(email, password) },
             )
 
-            Spacer(Modifier.height(100.dp))
+            Spacer(Modifier.height(40.dp))
 
-            // Optional: loading indicator
             if (state.isLoading) {
-                CircularProgressIndicator(color = blue)
+                CircularProgressIndicator(color = primaryBlue)
             }
+
+            Spacer(Modifier.height(60.dp))
         }
     }
 }

@@ -41,6 +41,8 @@ android {
 
 dependencies {
 
+
+    implementation("io.socket:socket.io-client:2.1.0")
     // Hilt
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
     implementation("com.google.dagger:hilt-android:2.51.1")

@@ -4,17 +4,19 @@ import com.example.domain.dataClasses.User
 
 interface UserRepository {
 
-    //api
-    suspend fun routerLogin(email: String, password: String): Result<String>
+    // Router API (Python Server)
+    suspend fun routerLogin(routerUser: String, routerPass: String): Result<String>
 
 
-    // Firebase
+    // Firebase (Identity)
     suspend fun register(email: String, password: String)
     suspend fun login(email: String, password: String)
     suspend fun resetPassword(email: String): Result<Unit>
     fun getCurrentUserEmail(): String?
 
-    // Room
+    //  Room (Local Cache)
     suspend fun addUser(user: User)
     suspend fun getUserName(email: String): String?
+    fun getCurrentUserId(): String?
+
 }

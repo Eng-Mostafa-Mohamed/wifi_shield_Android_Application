@@ -1,4 +1,5 @@
 package com.example.practice.presentation.utilities
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,9 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.practice.ui.theme.HeaderFont
 
-
 @Composable
 fun TwoStepHeader(currentStep: Int) {
+
+    val primaryBlue = Color(0xFF1c1b69)
 
     Box(
         modifier = Modifier
@@ -33,9 +35,9 @@ fun TwoStepHeader(currentStep: Int) {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF8f59fd),
-                        Color(0xFFb560f9),
-                        Color(0xFFc562fb),
+                        primaryBlue,
+                        primaryBlue.copy(alpha = 0.9f),
+                        primaryBlue.copy(alpha = 0.8f),
                     )
                 ),
                 shape = RoundedCornerShape(
@@ -46,14 +48,13 @@ fun TwoStepHeader(currentStep: Int) {
             .padding(30.dp)
     ) {
         Canvas(modifier = Modifier.size(200.dp).offset(x = 180.dp, y = (-50).dp)) {
-            drawCircle(color = Color.White.copy(alpha = 0.1f))
+            drawCircle(color = Color.White.copy(alpha = 0.05f))
         }
 
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-
 
             Column {
                 Text(
@@ -74,12 +75,7 @@ fun TwoStepHeader(currentStep: Int) {
                 )
             }
 
-
             TwoStepIndicator(currentStep)
         }
     }
 }
-
-
-
-

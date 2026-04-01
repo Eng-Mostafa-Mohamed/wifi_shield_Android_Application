@@ -25,21 +25,21 @@ import com.example.practice.presentation.screens.AuthScreen.RouterSetup
 import com.example.practice.presentation.screens.MainScreen.MainScreen
 import com.example.practice.presentation.screens.ToolsScreen.ToolsScreen
 import com.example.practice.presentation.screens.WelcomeScreen.WelcomeScreen
-import com.example.practice.presentation.screens.devices.BlockedDevicesScreen
-import com.example.practice.presentation.screens.devices.DevicesScreen
 import com.example.practice.presentation.screens.GuideScreen.GuideScreen
 import com.example.practice.presentation.screens.Test.FullWifiSettingsScreen
+import com.example.practice.presentation.screens.devices.BlacklistScreen
+import com.example.practice.presentation.screens.devices.DevicesScreen
 import com.example.practice.presentation.viewmodels.OnboardingViewModel
 
 @Composable
-fun AppNavGraph() {
+fun AppNavGraph(startDestination: String = "launcher") {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { padding ->
         NavHost(
             navController = navController,
-            startDestination = "launcher",
+            startDestination = startDestination,
             modifier = Modifier.padding(padding)
         ) {
 
@@ -73,17 +73,15 @@ fun AppNavGraph() {
             composable("welcome") { WelcomeScreen(navController) }
             composable("Main") { MainScreen(navController) }
             composable("Guide") { GuideScreen() }
-            composable("connectedDevices") { DevicesScreen(navController) }
-            composable("blockedDevices") { BlockedDevicesScreen(navController) }
+            composable("devices") { DevicesScreen() }
+            composable("blokeddevices") { BlacklistScreen() }
+
+
             composable("tools") { ToolsScreen() }
             composable("wifiSettings") { FullWifiSettingsScreen(navController) }
-
-
         }
     }
 }
-
-
 
 @Composable
 fun LauncherScreen(viewModel: OnboardingViewModel, navController: NavController) {
@@ -101,13 +99,13 @@ fun LauncherScreen(viewModel: OnboardingViewModel, navController: NavController)
         val token = SessionManager.authToken
         if (!token.isNullOrEmpty()) {
             LaunchedEffect(Unit) {
-                navController.navigate("MainReg") {
+                navController.navigate("onboarding") {
                     popUpTo("launcher") { inclusive = true }
                 }
             }
         } else {
             LaunchedEffect(Unit) {
-                navController.navigate("Main") {
+                navController.navigate("onboarding") {
                     popUpTo("launcher") { inclusive = true }
                 }
             }

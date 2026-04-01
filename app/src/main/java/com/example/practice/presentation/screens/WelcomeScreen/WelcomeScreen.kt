@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -23,78 +24,84 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.compose.material3.Text
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.e_commerce.utils.MainButton
 import com.example.practice.R
 import com.example.practice.SetStatusBarColor
 import com.example.practice.presentation.viewmodels.WelcomeViewModel
-import com.example.practice.ui.theme.blueBrush
-import com.example.practice.ui.theme.dark_blue
-import com.example.practice.ui.theme.secondaryColor
-
 
 @Composable
-fun WelcomeScreen(navController: NavController,modifier: Modifier = Modifier,viewModel: WelcomeViewModel= hiltViewModel()) {
+fun WelcomeScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    viewModel: WelcomeViewModel = hiltViewModel()
+) {
     val userName by viewModel.username
-    SetStatusBarColor(color =secondaryColor ,false)
+    val primaryColor = Color(0xFF1c1b69)
 
-    Box(modifier= Modifier
-        .fillMaxSize()
-        .background(secondaryColor)){
+    SetStatusBarColor(color = primaryColor, darkIcons = false)
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(primaryColor)
+    ) {
 
         Column(
-           modifier= Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-           ){
+        ) {
 
             Card(
                 modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .fillMaxHeight(0.6f),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                    .fillMaxWidth(0.85f)
+                    .fillMaxHeight(0.65f),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
 
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(24.dp),
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
                     Image(
                         painter = painterResource(R.drawable.welcome_img),
-                        contentDescription = "welcome_image"
+                        contentDescription = "welcome_image",
+                        modifier = Modifier.fillMaxWidth(0.7f)
                     )
 
                     Text(
                         text = "Hi ${userName ?: "Home"}",
-                        fontSize = 23.sp,
-                        color = Color.Black
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = primaryColor
                     )
 
                     Text(
-                        text = "Your smart network protection and performance monitor.Stay secure. Stay fast. Stay connected.",
+                        text = "Your smart network protection and performance monitor. Stay secure. Stay fast. Stay connected.",
                         fontSize = 15.sp,
-                        color = Color.Gray, textAlign = TextAlign.Center
-
+                        color = Color.Gray,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 22.sp
                     )
 
                     MainButton(
                         text = "Let's Go",
-                        bgBrush = blueBrush,
+                        bgBrush = Brush.horizontalGradient(
+                            colors = listOf(primaryColor, Color(0xFF2E2C96))
+                        ),
                         contentColor = Color.White,
                         onClick = { navController.navigate("Main") }
                     )
                 }
             }
-
         }
-
-
     }
-
 }

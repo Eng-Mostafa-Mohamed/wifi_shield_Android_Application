@@ -27,8 +27,8 @@ class RegisterUseCase(private val repo: UserRepository) {
         repo.register(email, password)
 }
 class RouterLoginUseCase(private val repo: UserRepository) {
-    suspend operator fun invoke(email: String, password: String) : Result<String>{
-        return  repo.routerLogin(email, password)
+    suspend operator fun invoke(routerUser: String, routerPass: String): Result<String> {
+        return repo.routerLogin(routerUser, routerPass)
     }
 }
 class LoginUseCase(private val repo: UserRepository) {

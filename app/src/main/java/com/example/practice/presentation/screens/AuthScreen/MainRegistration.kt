@@ -19,15 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.practice.presentation.utilities.TwoStepHeader
 
-
-
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun RegistrationScreen(navController: NavController) {
 
     var currentStep by remember { mutableStateOf(1) }
+    val primaryBlue = Color(0xFF1c1b69)
 
-    Scaffold(backgroundColor =    Color(0xFFc562fb)) {
+    Scaffold(backgroundColor = primaryBlue) {
         Box(modifier = Modifier.fillMaxSize()) {
 
             Column(
@@ -42,7 +41,8 @@ fun RegistrationScreen(navController: NavController) {
                     shape = RoundedCornerShape(
                         topStart = 40.dp,
                         topEnd = 40.dp
-                    )
+                    ),
+                    backgroundColor = Color.White
                 ) {
 
                     Box(
@@ -53,13 +53,13 @@ fun RegistrationScreen(navController: NavController) {
 
                         when (currentStep) {
                             1 -> RegisterScreen(
-                                navController,
+                                navController = navController,
                                 onRegisterSuccess = {
                                     currentStep = 2
                                 }
                             )
                             2 -> RouterSetup(
-                                navController=navController,
+                                navController = navController,
                                 onRegisterSuccess = {
                                     navController.navigate("welcome")
                                 }
@@ -68,10 +68,6 @@ fun RegistrationScreen(navController: NavController) {
                     }
                 }
             }
-
         }
     }
 }
-
-
-
